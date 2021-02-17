@@ -90,12 +90,14 @@ def report_different_deps(name, arch, rawhide_nevra, copr_nevra):
 
         if rawhide_pydeps != copr_pydeps:
             different = True
-            extra_in_copr = copr_pydeps - rawhide_pydeps
-            extra_in_rawhide = rawhide_pydeps - copr_pydeps
-            if extra_in_copr:
-                print(f'{name} has extra {deps} in copr:\n    {extra_in_copr}')
-            if extra_in_rawhide:
-                print(f'{name} has missing {deps} in copr:\n    {extra_in_rawhide}')
+            print(f'{name} has different {deps} in copr:')
+            for dep in sorted(copr_pydeps | rawhide_pydeps):
+                if dep in copr_pydeps and dep not in rawhide_pydeps:
+                    print(f'  + {dep}')
+                elif dep not in copr_pydeps and dep in rawhide_pydeps:
+                    print(f'  - {dep}')
+                else:
+                    print(f'    {dep}')
 
     if different:
         if not same_dist(rawhide_nevra, copr_nevra):
