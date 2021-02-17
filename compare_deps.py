@@ -14,7 +14,7 @@ debug = partial(print, file=sys.stderr)
 
 
 def sack(name, **kwargs):
-    """A DNF sack for rawhide, used for queries, cached"""
+    """A DNF sack for a repo, used for queries, cached"""
     debug(f'Creating repoquery sack for {name}')
     base = dnf.Base()
     conf = base.conf
