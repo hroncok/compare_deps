@@ -107,6 +107,8 @@ def report_different_deps(name, arch, rawhide_nevra, copr_nevra):
 
 COPR_PACKAGES = repoquery(repo='copr')
 
+counter = 0
+
 for copr_nevra in COPR_PACKAGES:
     arch = pkgarch(copr_nevra)
     if arch == 'src':
@@ -116,7 +118,10 @@ for copr_nevra in COPR_PACKAGES:
         continue
     rawhide_packages = repoquery(repo='rawhide', name=name, arch=arch)
     if rawhide_packages:
+        counter += 1
         rawhide_nevra = rawhide_packages.pop()
         report_different_deps(name, arch, rawhide_nevra, copr_nevra)
     else:
         debug(f'WARNING: {name} not found in rawhide\n')
+
+debug(f'Checked {counter} packages')
